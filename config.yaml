@@ -1,0 +1,48 @@
+llm:
+  api_key: ""                             # 建议使用环境变量或私有 config 文件填入
+  base_url: "https://co.yes.vg/gemini"    # 兼容 OpenAI SDK 的 Gemini 中转
+  model_fast: "gemini-3-flash"            # 用于相关性筛选
+  model_smart: "gemini-3-flash"           # 用于单篇分析/趋势总结
+  temperature: 0
+
+search:
+  categories:
+    - "cs.CL"
+    - "cs.AI"
+    - "cs.LG"
+  mode: "latest_update_day"  # latest_update_day | fixed_window
+  time_window_hours: 24      # fixed_window 时生效
+  lookback_days: 7           # latest_update_day 时生效
+  timezone: "UTC"
+  max_results: 120
+  keywords_include:
+    - "Agent"
+    - "RAG"
+    - "Long Context"
+  keywords_exclude:
+    - "survey"
+    - "benchmark"
+
+filter:
+  relevance_threshold: 60
+  max_selected: 20
+  reviewer_mode: "fast_only" # fast_only | fast_then_review
+
+trend:
+  enable_weekly: true
+  enable_monthly: true
+  weekly_days: 7
+  monthly_days: 30
+  top_k_keywords: 20
+  chart_type: "bar"          # bar | wordcloud
+
+spotlight:
+  enable: false
+  recent_days: 7
+  attention_threshold: 70
+  max_items: 2
+  sources:
+    - "semantic_scholar"
+
+output:
+  write_pdf: true

@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.pytest-tmp/
+pytest_tmp/
+pytest-cache-files-*/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+reports/
+reports_test/
+dailyarxiv.sqlite
+pytest_work_*/

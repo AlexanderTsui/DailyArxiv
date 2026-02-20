@@ -209,7 +209,10 @@ class ArchivistSQLite:
 
         out: list[PaperAnalysis] = []
         for r in arows:
-            out.append(PaperAnalysis.model_validate(json.loads(r["payload_json"])))
+            payload = json.loads(r["payload_json"])
+            if not str(payload.get("summary_cn", "")).strip():
+                payload["summary_cn"] = "（旧数据缺少摘要翻译）"
+            out.append(PaperAnalysis.model_validate(payload))
         return out
 
     def stats(self, *, days: int = 30) -> dict[str, Any]:

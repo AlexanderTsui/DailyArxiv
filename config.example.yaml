@@ -1,5 +1,5 @@
 llm:
-  api_key: ""                             # 不要把 key 写进仓库；建议用环境变量 GEMINI_API_KEY
+  api_key: ""
   base_url: "https://co.yes.vg/gemini"
   model_fast: "gemini-3-flash"
   model_smart: "gemini-3-flash"
@@ -10,9 +10,9 @@ search:
     - "cs.CL"
     - "cs.AI"
     - "cs.LG"
-  mode: "latest_update_day"  # latest_update_day | fixed_window
-  time_window_hours: 24      # fixed_window 时生效
-  lookback_days: 7           # latest_update_day 时生效
+  mode: "latest_update_day" # latest_update_day | fixed_window
+  time_window_hours: 24
+  lookback_days: 7
   timezone: "UTC"
   max_results: 120
   keywords_include:
@@ -26,7 +26,7 @@ search:
 filter:
   relevance_threshold: 60
   max_selected: 20
-  reviewer_mode: "fast_only"
+  reviewer_mode: "fast_only" # fast_only | fast_then_review
 
 trend:
   enable_weekly: true
@@ -34,11 +34,17 @@ trend:
   weekly_days: 7
   monthly_days: 30
   top_k_keywords: 20
-  chart_type: "bar"          # bar | wordcloud
+  chart_type: "bar" # bar | wordcloud
 
 spotlight:
   enable: false
+  recent_days: 7
+  attention_threshold: 70
+  max_items: 2
+  sources:
+    - "semantic_scholar"
 
 output:
   write_pdf: true
-
+  # HTML 模板：editorial | baseline | modern | compact（或直接填 *.j2 文件名）
+  html_template: "editorial"

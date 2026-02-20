@@ -30,9 +30,11 @@ def _analysis(pid: str) -> PaperAnalysis:
         title_en="Test Paper",
         title_cn="测试论文",
         authors=["A", "B", "C"],
+        affiliations=["Test University"],
         url=f"https://arxiv.org/abs/{pid}",
         publish_date="2026-02-18T12:00:00+00:00",
         primary_category="cs.CL",
+        summary_cn="这是摘要的中文翻译。",
         motivation="痛点",
         method="Method uses RAG and KV-Cache.",
         paradigm_relation="Incremental",
@@ -104,6 +106,43 @@ def test_sqlite_archive_roundtrip() -> None:
     shutil.rmtree(work, ignore_errors=True)
 
 
+def test_sqlite_get_analyses_between_backward_compat() -> None:
+    work = Path("pytest_work_sqlite_backward_compat")
+    shutil.rmtree(work, ignore_errors=True)
+    work.mkdir(parents=True, exist_ok=True)
+    db = work / "dailyarxiv.sqlite"
+    arch = ArchivistSQLite(db)
+    run_id = arch.begin_run(
+        report_date="2026-02-18",
+        generated_at="2026-02-19T08:00:00+00:00",
+        source_range_start="2026-02-18T00:00:00+00:00",
+        source_range_end="2026-02-18T23:59:59+00:00",
+        categories=["cs.CL"],
+        keywords=["rag"],
+        counts={"candidates": 1, "selected": 1},
+    )
+    # Simulate legacy record: payload_json missing summary_cn/affiliations.
+    legacy = _analysis("2502.1").model_dump()
+    legacy.pop("summary_cn", None)
+    legacy.pop("affiliations", None)
+    import sqlite3, json as _json
+
+    con = sqlite3.connect(db)
+    try:
+        con.execute(
+            "INSERT OR REPLACE INTO analyses (run_id, paper_id, payload_json, publish_date) VALUES (?, ?, ?, ?)",
+            (run_id, "2502.1", _json.dumps(legacy, ensure_ascii=False), legacy["publish_date"]),
+        )
+        con.commit()
+    finally:
+        con.close()
+
+    items = arch.get_analyses_between(days=60, timezone="UTC")
+    assert items
+    assert items[0].summary_cn
+    shutil.rmtree(work, ignore_errors=True)
+
+
 def test_render_html() -> None:
     work = Path("pytest_work_render")
     shutil.rmtree(work, ignore_errors=True)
@@ -128,5 +167,9 @@ def test_render_html() -> None:
     html = out.read_text(encoding="utf-8")
     assert "精选论文" in html
     assert "Global Trend" in html
-    assert "arXiv:2502.1" in html
+    assert "DailyArxiv" in html
+    assert "Test University" in html
+    assert "这是摘要的中文翻译。" in html
+    assert "arXiv:" in html
+    assert "2502.1" in html
     shutil.rmtree(work, ignore_errors=True)

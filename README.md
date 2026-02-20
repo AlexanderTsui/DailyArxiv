@@ -37,6 +37,10 @@ LLM（本项目支持 Gemini 网关，**不是 OpenAI 协议**也可以用）：
   - `GEMINI_API_KEY`（优先）
   - 或 `OPENAI_API_KEY`（兼容变量名）
 
+GUI 保存配置：
+- GUI 可将侧边栏输入保存到 `config.local.yaml`（已在 `.gitignore` 中忽略）。
+- 如需把 API key 也写入配置文件，需要在 GUI 勾选 “Save API key (unsafe)”（明文存储，请自行评估风险）。
+
 PowerShell 示例：
 ```powershell
 $env:GEMINI_API_KEY="YOUR_KEY"
@@ -47,6 +51,12 @@ $env:GEMINI_API_KEY="YOUR_KEY"
 ```bash
 dailyarxiv run --config config.yaml --out-dir reports
 ```
+
+可选：指定 HTML 模板（默认 `editorial`，可用 `editorial|baseline|modern|compact`，或直接填 `*.j2` 文件名）：
+```bash
+dailyarxiv run --config config.yaml --out-dir reports --template editorial
+```
+也可在配置文件中设置：`output.html_template: "editorial"`（见 `config.example.yaml`）。
 
 输出目录：`reports/<report_date>/`
 - `daily_report.json`：结构化结果（最重要）
@@ -62,6 +72,10 @@ dailyarxiv run --config config.yaml --out-dir reports --dry-run
 仅渲染（不重新调用 LLM）：
 ```bash
 dailyarxiv render --input reports/<report_date>/daily_report.json --out-dir reports/<report_date>
+```
+可选：渲染时切换模板：
+```bash
+dailyarxiv render --input reports/<report_date>/daily_report.json --out-dir reports/<report_date> --template baseline
 ```
 
 SQLite 归档（默认库：`dailyarxiv.sqlite`）：
@@ -88,4 +102,3 @@ GUI 特性：
 ## Troubleshooting
 - **PDF 没生成**：先确认 `weasyprint` 可 import；Windows 建议用 `conda-forge` 安装（见上文）。
 - **LLM 调用超时/失败**：可降低 `max_results` / `max_selected`，或重试；Gemini 网关已内置重试与较长超时。
-

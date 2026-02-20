@@ -13,6 +13,8 @@ from .render.renderer import render_report_html
 
 def _cmd_run(args: argparse.Namespace) -> int:
     settings = load_settings(Path(args.config))
+    if getattr(args, "template", None):
+        settings.output.html_template = str(args.template)
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -43,7 +45,7 @@ def _cmd_render(args: argparse.Namespace) -> int:
 
     report = json.loads(in_path.read_text(encoding="utf-8"))
     html_path = out_dir / "report.html"
-    render_report_html(report, html_path)
+    render_report_html(report, html_path, template_name=str(args.template))
 
     pdf_path = out_dir / "report.pdf"
     if not args.html_only:
@@ -91,12 +93,22 @@ def main(argv: list[str] | None = None) -> int:
     p_run.add_argument("--dry-run", action="store_true", help="Only harvest; do not call LLM.")
     p_run.add_argument("--html-only", action="store_true")
     p_run.add_argument("--pdf-only", action="store_true")
+    p_run.add_argument(
+        "--template",
+        default=None,
+        help="HTML template: editorial|baseline|modern|compact, or a '*.j2' filename.",
+    )
     p_run.set_defaults(func=_cmd_run)
 
     p_render = sub.add_parser("render", help="Render HTML/PDF from daily_report.json.")
     p_render.add_argument("--input", required=True)
     p_render.add_argument("--out-dir", required=True)
     p_render.add_argument("--html-only", action="store_true")
+    p_render.add_argument(
+        "--template",
+        default="editorial",
+        help="HTML template: editorial|baseline|modern|compact, or a '*.j2' filename.",
+    )
     p_render.set_defaults(func=_cmd_render)
 
     p_db = sub.add_parser("db", help="Inspect the SQLite archive.")

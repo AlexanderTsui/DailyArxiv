@@ -313,7 +313,12 @@
           {% for p in report.papers %}
           <article class="card">
             <h3><a href="{{ p.url }}">{{ p.title_en }}</a></h3>
-            <p class="sub">arXiv:{{ p.id }} · {{ p.publish_date }} · {{ p.authors | join(", ") }}</p>
+            <p class="sub">
+              arXiv:{{ p.id }} · {{ p.publish_date }} · {{ p.authors | join(", ") }}
+              <br/>
+              {% set affs = p.affiliations | default([]) %}
+              单位：{% if affs %}{{ affs | join("；") }}{% else %}—{% endif %}
+            </p>
             <div class="row">
               <span class="pill tag"><span class="dot"></span>{{ p.primary_category }}</span>
               <span class="pill good"><span class="dot"></span>相关度 {{ p.relevance.relevance_score }}</span>
@@ -327,6 +332,11 @@
             <div class="box method">
               <div class="k">Method · 方法</div>
               <p>{{ p.method }}</p>
+            </div>
+            <div class="box" style="background: rgba(148,163,184,.10); border: 1px solid var(--border)">
+              <div class="k">Abstract · 摘要翻译</div>
+              {% set s = (p.summary_cn | default("") | trim) %}
+              <p>{{ s if s else "（无）" }}</p>
             </div>
             <div class="why">
               <div class="k">为什么入选</div>
@@ -425,4 +435,3 @@
     </div>
   </body>
 </html>
-

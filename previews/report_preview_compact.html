@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DailyArxiv · 2026-02-18 · Compact</title>
+    <style>
+      :root{
+        --paper:#ffffff;
+        --ink:#111827;
+        --muted:#6b7280;
+        --border:#e5e7eb;
+        --chip:#f3f4f6;
+        --shadow:0 10px 22px rgba(17,24,39,.08);
+        --accent:#2563eb;
+        --good:#16a34a;
+        --warn:#d97706;
+      }
+      @page{
+        size:A4;
+        margin:14mm 12mm 16mm 12mm;
+        @bottom-center{
+          content:"DailyArxiv · 2026-02-18 · " counter(page) " / " counter(pages);
+          color:#9ca3af;
+          font-size:10px;
+          font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+        }
+      }
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        background:#f5f6f8;
+        color:var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+        line-height:1.45;
+      }
+      a{color:inherit; text-decoration:none; border-bottom:1px dotted #cbd5e1}
+      .shell{max-width: 1100px; margin:28px auto; padding:0 16px 56px}
+      .page{
+        width:min(210mm, 100%);
+        margin:0 auto 22px;
+        background:var(--paper);
+        border:1px solid var(--border);
+        border-radius:12px;
+        box-shadow:var(--shadow);
+        overflow:hidden;
+        padding:18mm 14mm;
+      }
+      .page-break{break-after:page; page-break-after:always}
+
+      .top{
+        display:flex;
+        justify-content:space-between;
+        gap:14px;
+        padding-bottom:10px;
+        border-bottom:1px solid var(--border);
+        margin-bottom:12px;
+      }
+      .top h1{margin:0; font-size:20px; letter-spacing:-.2px}
+      .top .meta{color:var(--muted); font-size:11.5px; text-align:right; line-height:1.35}
+      .chips{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 0; padding:0; list-style:none}
+      .chip{
+        display:inline-flex; gap:6px; align-items:center;
+        padding:4px 8px;
+        border:1px solid var(--border);
+        border-radius:999px;
+        background:var(--chip);
+        font-size:11px;
+        color:#374151;
+      }
+      .chip b{font-weight:700}
+
+      .lede{
+        border:1px solid var(--border);
+        border-radius:12px;
+        padding:10px 10px 9px;
+        background:#fbfdff;
+      }
+      .lede .k{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.35px; margin:0 0 6px}
+      .lede p{margin:0; font-size:13px}
+
+      .section-title{
+        margin:14px 0 10px;
+        font-size:14px;
+        letter-spacing:-.1px;
+      }
+
+      table{
+        width:100%;
+        border-collapse:separate;
+        border-spacing:0;
+        border:1px solid var(--border);
+        border-radius:12px;
+        overflow:hidden;
+        font-size:12px;
+      }
+      thead th{
+        background:#f8fafc;
+        color:#334155;
+        text-align:left;
+        font-size:11px;
+        letter-spacing:.35px;
+        text-transform:uppercase;
+        padding:10px 10px;
+        border-bottom:1px solid var(--border);
+        font-weight:700;
+      }
+      tbody td{
+        vertical-align:top;
+        padding:10px 10px;
+        border-bottom:1px solid var(--border);
+      }
+      tbody tr:last-child td{border-bottom:0}
+
+      .title{
+        font-weight:800;
+        letter-spacing:-.1px;
+        margin:0 0 6px;
+        font-size:12.5px;
+      }
+      .sub{
+        color:var(--muted);
+        font-size:11px;
+        margin:0 0 8px;
+      }
+      .badges{display:flex; flex-wrap:wrap; gap:6px}
+      .badge{
+        display:inline-flex; align-items:center; gap:6px;
+        padding:4px 8px;
+        border-radius:999px;
+        border:1px solid var(--border);
+        background:#fff;
+        font-size:11px;
+        white-space:nowrap;
+      }
+      .dot{width:7px; height:7px; border-radius:50%; background:#94a3b8}
+      .badge.good .dot{background:var(--good)}
+      .badge.warn .dot{background:var(--warn)}
+      .badge.tag{background:#f8fafc}
+
+      .mini{
+        margin:0;
+        color:#111827;
+        font-size:12px;
+        line-height:1.4;
+      }
+      .muted{color:var(--muted)}
+
+      .trend-grid{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+      .trend{
+        border:1px solid var(--border);
+        border-radius:12px;
+        padding:10px 10px 9px;
+        background:#ffffff;
+      }
+      .range{margin:0 0 8px; color:var(--muted); font-size:11px}
+      .bars{display:grid; gap:8px; margin-top:10px}
+      .bar{display:grid; grid-template-columns: 1fr 120px; gap:10px; align-items:center}
+      .track{height:9px; background:#eef2ff; border:1px solid #e5e7eb; border-radius:999px; overflow:hidden}
+      .fill{height:100%; background:linear-gradient(90deg, var(--accent), #60a5fa)}
+      .w{font-size:11px; color:var(--muted); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+      @media (max-width: 900px){
+        .top{flex-direction:column}
+        .top .meta{text-align:left}
+        .trend-grid{grid-template-columns:1fr}
+        table{font-size:11.5px}
+      }
+      @media print{
+        body{background:#fff}
+        .page{box-shadow:none}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="page page-break">
+        <header class="top">
+          <div>
+            <h1>DailyArxiv · 2026-02-18（紧凑版）</h1>
+            <ul class="chips">
+              
+              <li class="chip"><b>分区</b> cs.AI</li>
+              
+              <li class="chip"><b>分区</b> cs.CV</li>
+              
+              
+              <li class="chip"><b>关键词</b> 3D</li>
+              
+              <li class="chip"><b>关键词</b> generative</li>
+              
+              <li class="chip"><b>关键词</b> restruction</li>
+              
+            </ul>
+          </div>
+          <div class="meta">
+            生成：2026-02-19T18:49:02.900909+00:00<br/>
+            区间：2026-02-18T00:00:00+00:00 ~ 2026-02-18T23:59:59+00:00<br/>
+            论文：7 篇
+          </div>
+        </header>
+
+        <section class="lede">
+          <div class="k">Global Trend</div>
+          <p>今日前沿研究聚焦于提升3D场景理解与重建的精度与效率。研究涵盖了从姿态无关的服装裁剪图生成、共享基平面的轻量化表示，到亚毫米级镜框测量及面向机器人协作的关节语义场景图构建。通过引入可学习周期激活、多尺度注意力机制及视觉语言模型，这些方法在保持甚至超越现有SOTA表现的同时，显著降低了计算开销与内存占用，推动了计算机视觉在辅助避障、自动化配镜及移动操作等实际场景中的高效落地。</p>
+        </section>
+
+        <h2 class="section-title">精选论文 · Selected Papers</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 42%">论文</th>
+              <th style="width: 22%">标签</th>
+              <th style="width: 36%">摘要要点（Motivation / Method / Why）</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>
+                <div class="title">DressWild: 基于野外图像的姿态无关前馈服装缝制裁剪图生成</div>
+                <div class="sub">
+                  arXiv: <a href="http://arxiv.org/abs/2602.16502v1">2602.16502v1</a> · cs.CV · 2026-02-18T14:45:15+00:00
+                </div>
+                <div class="badges">
+                  <span class="badge good"><span class="dot"></span>相关度 95</span>
+                  <span class="badge warn"><span class="dot"></span>推荐度 4/5</span>
+                  <span class="badge tag"><span class="dot"></span>相比现有SOTA，该方法在无需迭代优化的前提下，显著提升了对复杂姿态的鲁棒性与生成效率。</span>
+                </div>
+              </td>
+              <td>
+                <p class="mini">
+                  <span class="muted">作者：</span>Zeng Tao, Ying Jiang, Yunuo Chen<br/>
+                  <span class="muted">分区：</span>cs.CV
+                </p>
+              </td>
+              <td>
+                <p class="mini"><span class="muted">Motivation：</span>现有前馈方法难处理复杂姿态，优化法效率低，亟需从单图高效生成可编辑、可仿真的服装裁剪图。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Method：</span>利用VLM归一化姿态，通过Transformer融合3D感知特征，直接预测2D裁剪图参数实现重建。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Why：</span>命中 3D / generation / reconstructs；该论文研究从单张图像进行3D服装重建与模式生成，与3D、生成和重建关键词高度契合。</p>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <div class="title">Fused-Planes：基于共享机制的高效三平面3D表示</div>
+                <div class="sub">
+                  arXiv: <a href="http://arxiv.org/abs/2410.23742v3">2410.23742v3</a> · cs.CV · 2026-02-18T11:25:46+00:00
+                </div>
+                <div class="badges">
+                  <span class="badge good"><span class="dot"></span>相关度 95</span>
+                  <span class="badge warn"><span class="dot"></span>推荐度 5/5</span>
+                  <span class="badge tag"><span class="dot"></span>改进了主流的Tri-Plane表示法，在保持渲染质量的同时显著提升了训练速度并降低了内存占用。</span>
+                </div>
+              </td>
+              <td>
+                <p class="mini">
+                  <span class="muted">作者：</span>Karim Kassab, Antoine Schnepf, Jean-Yves Franceschi<br/>
+                  <span class="muted">分区：</span>cs.CV
+                </p>
+              </td>
+              <td>
+                <p class="mini"><span class="muted">Motivation：</span>传统Tri-Plane独立训练每个物体，忽视了类别内的结构相似性，导致大规模重建效率极低。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Method：</span>引入全局共享基平面，通过潜空间将物体表示为基平面的分解与特定特征的结合，优化资源利用。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Why：</span>命中 3D / restruction；该论文提出了一种高效的3D表示方法，专注于物体类别的重建，与3D和重建（restruction）关键词高度契合。</p>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <div class="title">面向视障辅助的参数无关自适应多尺度通道-空间注意力聚合3D室内语义场景补全框架</div>
+                <div class="sub">
+                  arXiv: <a href="http://arxiv.org/abs/2602.16385v1">2602.16385v1</a> · cs.CV · 2026-02-18T11:45:01+00:00
+                </div>
+                <div class="badges">
+                  <span class="badge good"><span class="dot"></span>相关度 85</span>
+                  <span class="badge warn"><span class="dot"></span>推荐度 4/5</span>
+                  <span class="badge tag"><span class="dot"></span>基于MonoScene管线的改进，通过轻量级注意力与门控机制优化特征质量，在NYUv2上优于现有SOTA。</span>
+                </div>
+              </td>
+              <td>
+                <p class="mini">
+                  <span class="muted">作者：</span>Qi He, XiangXiang Wang, Jingtao Zhang<br/>
+                  <span class="muted">分区：</span>cs.CV
+                </p>
+              </td>
+              <td>
+                <p class="mini"><span class="muted">Motivation：</span>单目SSC在投影和融合时缺乏可靠性建模，易产生投影扩散和特征纠缠，导致室内场景结构稳定性差。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Method：</span>提出AMAA框架，利用并行通道空间注意力校准特征，并通过分层自适应门控策略优化多尺度信息注入。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Why：</span>命中 3D / restruction；该论文研究3D语义场景补全（SSC），属于3D重建领域，且补全任务具有生成性质。</p>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <div class="title">具有可学习周期激活函数的减法调制网络</div>
+                <div class="sub">
+                  arXiv: <a href="http://arxiv.org/abs/2602.16337v1">2602.16337v1</a> · cs.CV · 2026-02-18T10:20:50+00:00
+                </div>
+                <div class="badges">
+                  <span class="badge good"><span class="dot"></span>相关度 85</span>
+                  <span class="badge warn"><span class="dot"></span>推荐度 4/5</span>
+                  <span class="badge tag"><span class="dot"></span>在图像重建和NeRF任务中，相比当前SOTA方法实现了更高的参数效率与重建精度。</span>
+                </div>
+              </td>
+              <td>
+                <p class="mini">
+                  <span class="muted">作者：</span>Tiou Wang, Zhuoqian Yang, Markus Flierl<br/>
+                  <span class="muted">分区：</span>cs.CV
+                </p>
+              </td>
+              <td>
+                <p class="mini"><span class="muted">Motivation：</span>现有INR架构在处理复杂信号时参数效率不足，且缺乏基于经典信号处理原则的系统性设计。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Method：</span>提出SMN架构，利用可学习周期激活层生成多频基底，并通过调制掩码模块主动生成高次谐波。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Why：</span>命中 3D / restruction；该论文研究INR架构，在3D NeRF任务和重建精度上表现优异，符合用户关键词。</p>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <div class="title">FindAnything：面向任意环境机器人探索的开放词汇与以物体为中心的建图</div>
+                <div class="sub">
+                  arXiv: <a href="http://arxiv.org/abs/2504.08603v3">2504.08603v3</a> · cs.RO · 2026-02-18T15:52:04+00:00
+                </div>
+                <div class="badges">
+                  <span class="badge good"><span class="dot"></span>相关度 75</span>
+                  <span class="badge warn"><span class="dot"></span>推荐度 4/5</span>
+                  <span class="badge tag"><span class="dot"></span>语义精度比肩SOTA，但在速度和内存效率上显著提升，支持资源受限设备下的实时机器人探索任务。</span>
+                </div>
+              </td>
+              <td>
+                <p class="mini">
+                  <span class="muted">作者：</span>Sebastián Barbas Laina, Simon Boche, Sotiris Papatheodorou<br/>
+                  <span class="muted">分区：</span>cs.RO
+                </p>
+              </td>
+              <td>
+                <p class="mini"><span class="muted">Motivation：</span>大规模未知环境的实时开放词汇语义理解受限于计算与内存开销，难以在无人机等受限设备上部署。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Method：</span>利用eSAM在物体级聚合视觉语言特征，并集成至体积子图中，实现高效的以物体为中心的3D语义建图。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Why：</span>命中 3D / restruction；该论文涉及3D几何建图与体积表示，与3D重建（restruction）高度相关，但未涉及生成式（generative）技术。</p>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <div class="title">突破亚毫米壁垒：基于彩色图像的眼镜框获取</div>
+                <div class="sub">
+                  arXiv: <a href="http://arxiv.org/abs/2602.16281v1">2602.16281v1</a> · cs.CV · 2026-02-18T09:06:06+00:00
+                </div>
+                <div class="badges">
+                  <span class="badge good"><span class="dot"></span>相关度 70</span>
+                  <span class="badge warn"><span class="dot"></span>推荐度 4/5</span>
+                  <span class="badge tag"><span class="dot"></span>该方法通过计算机视觉替代了传统的机械追踪设备，在保持亚毫米级精度的同时显著简化了配镜工作流。</span>
+                </div>
+              </td>
+              <td>
+                <p class="mini">
+                  <span class="muted">作者：</span>Manel Guzmán, Antonio Agudo<br/>
+                  <span class="muted">分区：</span>cs.CV
+                </p>
+              </td>
+              <td>
+                <p class="mini"><span class="muted">Motivation：</span>传统眼镜框机械扫描耗时长、需专用设备且效率低，需亚毫米级精度的自动化视觉替代方案。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Method：</span>基于多视图彩色图像，融合图像分割、深度估计与RGB-D数据集成，实现高精度镜框3D轮廓测量。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Why：</span>命中 3D / restruction；该论文涉及从多视图图像中进行深度估计以获取3D空间信息，符合3D重建的研究方向。</p>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <div class="title">面向开放世界移动操作的关节式3D场景图</div>
+                <div class="sub">
+                  arXiv: <a href="http://arxiv.org/abs/2602.16356v1">2602.16356v1</a> · cs.RO · 2026-02-18T10:40:35+00:00
+                </div>
+                <div class="badges">
+                  <span class="badge good"><span class="dot"></span>相关度 65</span>
+                  <span class="badge warn"><span class="dot"></span>推荐度 4/5</span>
+                  <span class="badge tag"><span class="dot"></span>在传统3D场景图基础上引入运动学建模与层级关系推理，通过统一优化框架提升了关节参数估计的鲁棒性。</span>
+                </div>
+              </td>
+              <td>
+                <p class="mini">
+                  <span class="muted">作者：</span>Martin Büchner, Adrian Röfer, Tim Engelbracht<br/>
+                  <span class="muted">分区：</span>cs.RO
+                </p>
+              </td>
+              <td>
+                <p class="mini"><span class="muted">Motivation：</span>机器人难以预测物体运动，需弥合语义、几何与运动学差距以实现长程移动操作。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Method：</span>提出MoMa-SG，利用点追踪和统一螺旋估计识别关节参数，通过父子关系推理构建语义运动场景图。</p>
+                <p class="mini" style="margin-top:8px"><span class="muted">Why：</span>命中 3D / restruction；该论文涉及3D场景图构建与运动模型重建，符合3D和重建关键词，但未涉及生成式内容。</p>
+              </td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </section>
+
+      <section class="page">
+        <h2 class="section-title" style="margin-top:0">本周 / 本月趋势 · Trends</h2>
+        <div class="trend-grid">
+          <section class="trend">
+            <div class="k">Weekly</div>
+            
+            <div class="range">2026-02-13 ~ 2026-02-19</div>
+            <p class="mini">本周计算机视觉与机器人领域的研究呈现出明显的“效能与实战”导向。在3D表征与重建方面，Fused-Planes与SMN等工作通过优化基底共享与激活机制，在提升精度的同时显著降低了算力门槛。同时，三维语义感知的应用场景进一步向复杂现实环境延伸：从支持机器人实时探索的物体中心化建图，到具备运动学推理能力的层级场景图MoMa-SG，再到面向视障辅助与服装制造的轻量化方案，研究者们正致力于通过高效的注意力机制与多模态融合技术，在保持亚毫米级精度或高鲁棒性的前提下，实现从虚拟建模到物理世界操作的无缝衔接。</p>
+            <div class="bars">
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 100.0%"></div></div>
+                <div class="w">restruction</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 67.0%"></div></div>
+                <div class="w">sota</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">tri-plane</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">esam</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">rgb-d</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">smn</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">nerf</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">moma-sg</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">amaa</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">monoscene</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">nyuv2</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">vlm</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">transformer</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">generation</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">reconstructs</div>
+              </div>
+              
+            </div>
+            
+          </section>
+          <section class="trend">
+            <div class="k">Monthly</div>
+            
+            <div class="range">2026-01-21 ~ 2026-02-19</div>
+            <p class="mini">本阶段的研究核心在于通过架构优化与多模态融合，实现三维感知与重建的“降本增效”与“高精落地”。从Fused-Planes对表示法的轻量化改进，到SMN与AMAA在参数效率上的突破，显现出学界正致力于在有限算力下追求极致的重建精度。同时，研究视野正向复杂现实场景深度延伸：MoMa-SG与FindAnything增强了机器人在动态开放环境下的语义理解与运动建模能力；而DressWild与镜框高精度测量则标志着计算机视觉正取代传统机械设备，实现从姿态鲁棒性到亚毫米级精度的跨越，加速了三维视觉在移动机器人与个性化定制领域的工业化进程。</p>
+            <div class="bars">
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 100.0%"></div></div>
+                <div class="w">restruction</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 67.0%"></div></div>
+                <div class="w">sota</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">tri-plane</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">esam</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">rgb-d</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">smn</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">nerf</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">moma-sg</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">amaa</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">monoscene</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">nyuv2</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">vlm</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">transformer</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">generation</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">reconstructs</div>
+              </div>
+              
+            </div>
+            
+          </section>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

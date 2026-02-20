@@ -14,6 +14,7 @@ class PaperCandidate(BaseModel):
     id: str
     title_en: str
     authors: list[str]
+    affiliations: list[str] = Field(default_factory=list)
     url: str
     publish_date: str
     categories: list[str]
@@ -33,10 +34,12 @@ class PaperAnalysis(BaseModel):
     title_en: str
     title_cn: str
     authors: list[str]
+    affiliations: list[str] = Field(default_factory=list)
     url: str
     publish_date: str
     primary_category: str
 
+    summary_cn: str = Field(min_length=1)
     motivation: str
     method: str
     paradigm_relation: str
@@ -84,4 +87,3 @@ class DailyReport(BaseModel):
     weekly_trend: PeriodTrend | None = None
     monthly_trend: PeriodTrend | None = None
     spotlight: list[SpotlightItem] = Field(default_factory=list)
-

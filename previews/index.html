@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DailyArxiv · Layout Previews</title>
+    <style>
+      body{margin:0;background:#0b1020;color:#e5e7eb;font-family:system-ui,-apple-system,"Segoe UI",Arial,"Microsoft YaHei",sans-serif}
+      .wrap{max-width:1000px;margin:28px auto;padding:0 16px 56px}
+      h1{margin:0 0 6px;font-size:22px}
+      p{margin:0 0 18px;color:#9ca3af}
+      .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+      .card{display:block;border:1px solid rgba(148,163,184,.24);background:rgba(15,23,42,.7);border-radius:14px;padding:12px 12px 10px;text-decoration:none;color:inherit}
+      .card:hover{border-color:rgba(99,102,241,.55)}
+      .t{font-weight:800;letter-spacing:-.1px}
+      .s{margin-top:6px;color:#9ca3af;font-size:12px}
+      code{background:rgba(148,163,184,.12);padding:2px 6px;border-radius:999px}
+      @media (max-width:720px){.grid{grid-template-columns:1fr}}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>DailyArxiv · Layout Previews</h1>
+      <p>基于 <code>reports/2026-02-18/daily_report.json</code> 生成。点击下面任意方案打开预览。</p>
+      <div class="grid"><a class="card" href="report_preview_baseline.html">
+          <div class="t">baseline</div>
+          <div class="s">report_preview_baseline.html</div>
+        </a>
+<a class="card" href="report_preview_modern.html">
+          <div class="t">modern</div>
+          <div class="s">report_preview_modern.html</div>
+        </a>
+<a class="card" href="report_preview_editorial.html">
+          <div class="t">editorial</div>
+          <div class="s">report_preview_editorial.html</div>
+        </a>
+<a class="card" href="report_preview_compact.html">
+          <div class="t">compact</div>
+          <div class="s">report_preview_compact.html</div>
+        </a></div>
+    </div>
+  </body>
+</html>

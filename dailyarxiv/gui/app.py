@@ -11,11 +11,10 @@ from typing import Any
 import streamlit as st
 
 from dailyarxiv.archivist_sqlite import ArchivistSQLite
+from dailyarxiv.config import save_settings
 from dailyarxiv.gui.forms import load_settings_or_default, settings_to_ui_dict, ui_dict_to_settings
 from dailyarxiv.gui.i18n import tr
 from dailyarxiv.gui.runner import drain_progress, run_in_background
-from dailyarxiv.render.renderer import render_report_html
-from dailyarxiv.render.weasyprint_renderer import render_html_to_pdf_if_available
 
 
 APP_TITLE = "DailyArxiv GUI"
@@ -65,9 +64,15 @@ def main() -> int:
 def _page_run() -> None:
     lang = st.session_state.lang
     st.sidebar.subheader(tr(lang, "config"))
-    config_path = st.sidebar.text_input(tr(lang, "config_path"), value="config.yaml")
+    default_cfg = "config.local.yaml" if Path("config.local.yaml").exists() else "config.yaml"
+    config_path = st.sidebar.text_input(tr(lang, "config_path"), value=default_cfg)
     settings = load_settings_or_default(config_path)
     ui = settings_to_ui_dict(settings)
+
+    st.sidebar.subheader(tr(lang, "save_config"))
+    save_path = st.sidebar.text_input(tr(lang, "save_path"), value="config.local.yaml")
+    autosave_on_run = st.sidebar.checkbox(tr(lang, "autosave_on_run"), value=True)
+    save_api_key = st.sidebar.checkbox(tr(lang, "save_api_key"), value=False)
 
     st.sidebar.subheader(tr(lang, "llm"))
     st.sidebar.caption(tr(lang, "llm_caption"))
@@ -109,6 +114,14 @@ def _page_run() -> None:
 
     st.sidebar.subheader(tr(lang, "output"))
     out_dir = st.sidebar.text_input(tr(lang, "out_dir"), value="reports")
+    template_options = ["editorial", "baseline", "modern", "compact"]
+    current_template = str(ui["output"].get("html_template", "editorial") or "editorial")
+    template_index = template_options.index(current_template) if current_template in template_options else 0
+    ui["output"]["html_template"] = st.sidebar.selectbox(
+        tr(lang, "html_template"),
+        options=template_options,
+        index=template_index,
+    )
     ui["output"]["write_pdf"] = st.sidebar.checkbox(tr(lang, "write_pdf"), value=bool(ui["output"].get("write_pdf", True)))
 
     st.sidebar.subheader(tr(lang, "live"))
@@ -127,6 +140,15 @@ def _page_run() -> None:
     settings_obj = ui_dict_to_settings(ui)
     if llm_api_key.strip():
         settings_obj.llm.api_key = llm_api_key.strip()
+        ui.setdefault("llm", {})
+        ui["llm"]["api_key"] = llm_api_key.strip()
+
+    if st.sidebar.button(tr(lang, "btn_save")):
+        try:
+            save_settings(Path(save_path), settings_obj, include_api_key=save_api_key)
+            st.sidebar.success(tr(lang, "saved_ok", path=str(save_path)))
+        except Exception as e:
+            st.sidebar.error(tr(lang, "saved_fail", error=str(e)))
 
     if "job" not in st.session_state:
         st.session_state.job = None
@@ -145,6 +167,12 @@ def _page_run() -> None:
     cancel_btn = st.button(tr(lang, "btn_cancel"), disabled=st.session_state.job is None)
 
     if run_btn:
+        if autosave_on_run:
+            try:
+                save_settings(Path(save_path), settings_obj, include_api_key=save_api_key)
+            except Exception as e:
+                st.sidebar.error(tr(lang, "saved_fail", error=str(e)))
+                st.stop()
         st.session_state.cancel = threading.Event()
         st.session_state.progress_q = queue.Queue()
         st.session_state.progress_log = []
@@ -403,4 +431,3 @@ def _weasyprint_ok() -> bool:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

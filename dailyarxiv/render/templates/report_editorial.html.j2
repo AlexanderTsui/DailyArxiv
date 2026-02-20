@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DailyArxiv · {{ report.date }} · Editorial</title>
+    <style>
+      :root{
+        --paper:#ffffff;
+        --ink:#0f172a;
+        --muted:#475569;
+        --border:#e2e8f0;
+        --shadow:0 12px 26px rgba(15,23,42,.10);
+        --accent:#0ea5e9;
+        --accent2:#22c55e;
+        --pill:#f1f5f9;
+        --callout:#f8fafc;
+      }
+      @page{
+        size:A4;
+        margin:16mm 14mm 18mm 14mm;
+        @bottom-center{
+          content:"DailyArxiv · {{ report.date }} · " counter(page) " / " counter(pages);
+          color:#94a3b8;
+          font-size:10px;
+          font-family: "Times New Roman", Times, serif;
+        }
+      }
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        background:#f3f4f6;
+        color:var(--ink);
+        font-family: Georgia, "Times New Roman", Times, "Songti SC", "SimSun", serif;
+        line-height:1.55;
+      }
+      a{color:inherit; text-decoration:none; border-bottom:1px dotted #cbd5e1}
+      .shell{max-width: 980px; margin:28px auto; padding:0 16px 56px}
+      .page{
+        width:min(210mm, 100%);
+        margin:0 auto 22px;
+        background:var(--paper);
+        border:1px solid var(--border);
+        border-radius:10px;
+        box-shadow:var(--shadow);
+        overflow:hidden;
+        padding:18mm 16mm;
+      }
+      .page-break{break-after:page; page-break-after:always}
+
+      .masthead{
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-end;
+        gap:14px;
+        padding-bottom:10px;
+        border-bottom:1px solid var(--border);
+        margin-bottom:14px;
+      }
+      .masthead h1{
+        margin:0;
+        font-size:26px;
+        letter-spacing:-.2px;
+        font-family: ui-serif, Georgia, "Times New Roman", serif;
+      }
+      .masthead .meta{
+        text-align:right;
+        color:var(--muted);
+        font-size:12px;
+        line-height:1.35;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+      }
+
+      .subline{
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px 10px;
+        color:var(--muted);
+        font-size:12px;
+        margin:0 0 12px;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+      }
+      .pill{
+        display:inline-flex; align-items:center; gap:6px;
+        padding:4px 9px;
+        border:1px solid var(--border);
+        background:var(--pill);
+        border-radius:999px;
+        font-size:11px;
+        white-space:nowrap;
+      }
+      .pill b{font-weight:700}
+      .dot{width:7px; height:7px; border-radius:50%; background:var(--accent)}
+
+      .lede{
+        display:grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap:16px;
+        margin-top:10px;
+      }
+      .callout{
+        border:1px solid var(--border);
+        background:var(--callout);
+        border-radius:12px;
+        padding:12px 12px 10px;
+      }
+      .k{
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+        color:var(--muted);
+        font-size:11px;
+        letter-spacing:.35px;
+        text-transform:uppercase;
+        margin:0 0 6px;
+      }
+      .callout p{margin:0; font-size:14px}
+      .callout ol{margin:0; padding-left:18px}
+      .callout li{margin:0 0 10px}
+
+      .section-title{
+        margin:18px 0 10px;
+        font-size:16px;
+        letter-spacing:-.1px;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+      }
+
+      .paper{
+        padding:12px 0;
+        border-top:1px solid var(--border);
+        break-inside:avoid;
+        page-break-inside:avoid;
+      }
+      .paper:first-of-type{border-top:0; padding-top:0}
+      .paper h3{
+        margin:0 0 6px;
+        font-size:15px;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+        letter-spacing:-.1px;
+      }
+      .paper .sub{
+        margin:0 0 10px;
+        color:var(--muted);
+        font-size:12px;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+      }
+      .paper .grid{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap:10px 12px;
+        margin-top:6px;
+      }
+      .box{
+        border:1px solid var(--border);
+        border-radius:12px;
+        padding:10px 10px 8px;
+        background:#fff;
+      }
+      .box.full{grid-column:1 / -1}
+      .box p{margin:0; font-size:13.5px}
+      .why{
+        border-left:3px solid var(--accent2);
+        background:rgba(34,197,94,.07);
+      }
+      .score{
+        border-left:3px solid var(--accent);
+        background:rgba(14,165,233,.07);
+      }
+
+      .trend-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+      .range{margin:0 0 10px; color:var(--muted); font-size:12px}
+      .bars{display:grid; gap:8px; margin-top:10px}
+      .bar{display:grid; grid-template-columns: 1fr 160px; gap:10px; align-items:center}
+      .track{height:10px; background:#eef2ff; border:1px solid #e5e7eb; border-radius:999px; overflow:hidden}
+      .fill{height:100%; background:linear-gradient(90deg, var(--accent), #6366f1)}
+      .w{font-size:12px; color:var(--muted); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+      @media (max-width: 860px){
+        .lede{grid-template-columns:1fr}
+        .paper .grid{grid-template-columns:1fr}
+        .trend-grid{grid-template-columns:1fr}
+        .masthead{flex-direction:column; align-items:flex-start}
+        .masthead .meta{text-align:left}
+      }
+      @media print{
+        body{background:#fff}
+        .page{box-shadow:none}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="page page-break">
+        <header class="masthead">
+          <div>
+            <h1>DailyArxiv · {{ report.date }}</h1>
+          </div>
+          <div class="meta">
+            生成：{{ report.generated_at }}<br/>
+            论文：{{ report.papers | length }} 篇
+          </div>
+        </header>
+
+        <div class="subline">
+          <span class="pill"><span class="dot"></span><b>区间</b> {{ report.source_range_start }} ~ {{ report.source_range_end }}</span>
+          <span class="pill"><span class="dot" style="background:var(--accent2)"></span><b>领域</b> {{ report.domain }}</span>
+          {% for c in report.categories %}
+          <span class="pill"><span class="dot"></span><b>分区</b> {{ c }}</span>
+          {% endfor %}
+          {% for k in report.keywords %}
+          <span class="pill"><span class="dot" style="background:#a855f7"></span><b>关键词</b> {{ k }}</span>
+          {% endfor %}
+        </div>
+
+        <div class="lede">
+          <section class="callout">
+            <div class="k">Global Trend</div>
+            <p>{{ report.global_trend }}</p>
+          </section>
+          <section class="callout">
+            <div class="k">Top 3 Picks</div>
+            <ol>
+              {% for p in report.papers[:3] %}
+              <li>
+                <div style="font-weight:700; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Arial, 'Microsoft YaHei', sans-serif">
+                  {{ p.title_cn or p.title_en }}
+                </div>
+                <div style="color:var(--muted); font-size:12px">
+                  arXiv: <a href="{{ p.url }}">{{ p.id }}</a> · {{ p.primary_category }}
+                </div>
+              </li>
+              {% endfor %}
+            </ol>
+          </section>
+        </div>
+
+        <h2 class="section-title">精选论文 · Selected Papers</h2>
+        {% for p in report.papers %}
+        <article class="paper">
+          <h3>{{ p.title_cn or p.title_en }}</h3>
+          <div class="sub">
+            arXiv: <a href="{{ p.url }}">{{ p.id }}</a>
+            · {{ p.primary_category }}
+            · {{ p.publish_date }}
+            <br/>
+            {% set affs = p.affiliations | default([]) %}
+            单位：{% if affs %}{{ affs | join("；") }}{% else %}—{% endif %}
+          </div>
+
+          <div class="paper grid">
+            <section class="box score">
+              <div class="k">Scores</div>
+              <p>
+                相关度：{{ p.relevance.relevance_score }}/100<br/>
+                推荐度：{{ p.score }}/5<br/>
+                范式关系：{{ p.paradigm_relation }}
+              </p>
+            </section>
+            <section class="box why">
+              <div class="k">Why selected</div>
+              <p>
+                命中：{{ p.relevance.matched_terms | join(" / ") }}<br/>
+                理由：{{ p.relevance.reason_cn }}
+              </p>
+            </section>
+            <section class="box">
+              <div class="k">Motivation</div>
+              <p>{{ p.motivation }}</p>
+            </section>
+            <section class="box">
+              <div class="k">Method</div>
+              <p>{{ p.method }}</p>
+            </section>
+            <section class="box full">
+              <div class="k">Abstract · 摘要翻译</div>
+              {% set s = (p.summary_cn | default("") | trim) %}
+              <p>{{ s if s else "（无）" }}</p>
+            </section>
+          </div>
+        </article>
+        {% endfor %}
+      </section>
+
+      <section class="page">
+        <h2 class="section-title" style="margin-top:0">本周 / 本月趋势 · Trends</h2>
+        <div class="trend-grid">
+          <section class="callout">
+            <div class="k">Weekly</div>
+            {% if report.weekly_trend %}
+            <div class="range">{{ report.weekly_trend.start_date }} ~ {{ report.weekly_trend.end_date }}</div>
+            <p>{{ report.weekly_trend.summary_cn }}</p>
+            <div class="bars">
+              {% for kw in report.weekly_trend.keywords %}
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: {{ (kw.weight * 100) | round(0) }}%"></div></div>
+                <div class="w">{{ kw.keyword }}</div>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="range">（未启用）</div>
+            {% endif %}
+          </section>
+          <section class="callout">
+            <div class="k">Monthly</div>
+            {% if report.monthly_trend %}
+            <div class="range">{{ report.monthly_trend.start_date }} ~ {{ report.monthly_trend.end_date }}</div>
+            <p>{{ report.monthly_trend.summary_cn }}</p>
+            <div class="bars">
+              {% for kw in report.monthly_trend.keywords %}
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: {{ (kw.weight * 100) | round(0) }}%"></div></div>
+                <div class="w">{{ kw.keyword }}</div>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="range">（未启用）</div>
+            {% endif %}
+          </section>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

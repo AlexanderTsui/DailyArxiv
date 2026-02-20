@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ArXiv Daily Express · 2026-02-18</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --ink: #111827;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+
+        --motivation: #fadbd8;
+        --method: #d5f5e3;
+        --chip: #f3f4f6;
+        --chip-ink: #374151;
+
+        --spot: #fff7ed;
+        --spot-border: #fdba74;
+      }
+
+      @page {
+        size: A4;
+        margin: 16mm 14mm 16mm 14mm;
+        @bottom-center {
+          content: "ArXiv Daily Express  ·  " counter(page) " / " counter(pages);
+          color: #9ca3af;
+          font-size: 10px;
+          font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        }
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: #f5f6f8;
+        color: var(--ink);
+        font-family: Georgia, "Times New Roman", Times, "SimSun", "Songti SC", serif;
+        line-height: 1.45;
+      }
+
+      a { color: inherit; text-decoration: none; border-bottom: 1px dotted #cbd5e1; }
+
+      .preview-shell {
+        max-width: 1000px;
+        margin: 28px auto;
+        padding: 0 16px 48px;
+      }
+
+      .page {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin: 0 auto 22px;
+        padding: 18mm 16mm;
+        width: min(210mm, 100%);
+      }
+
+      .page-break { break-after: page; page-break-after: always; }
+
+      .brand {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 14px;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 22px;
+        letter-spacing: -0.2px;
+      }
+
+      .brand .meta {
+        text-align: right;
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 10px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 9px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--chip);
+        color: var(--chip-ink);
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+
+      .chip strong { font-weight: 700; }
+
+      .section-title {
+        margin: 18px 0 10px;
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 15px;
+        letter-spacing: -0.1px;
+      }
+
+      .lede {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 14px;
+        margin-top: 12px;
+      }
+
+      .trend, .top3 {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 12px 10px;
+      }
+
+      .trend .label, .top3 .label {
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 6px;
+      }
+
+      .trend p { margin: 0; font-size: 14px; }
+      .top3 ol { margin: 0; padding-left: 18px; }
+      .top3 li { margin: 0 0 8px; font-size: 13px; }
+      .top3 .t { font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .top3 .sub { font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif; color: var(--muted); font-size: 11px; }
+
+      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .card h3 {
+        margin: 0 0 6px;
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 14px;
+        letter-spacing: -0.1px;
+      }
+
+      .card .sub {
+        margin: 0 0 10px;
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+
+      .box { border-radius: 12px; padding: 10px 10px 9px; margin: 0 0 10px; }
+      .box .k {
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 11px;
+        color: #111827;
+        font-weight: 800;
+        margin: 0 0 6px;
+      }
+      .box p { margin: 0; font-size: 13px; }
+      .motivation { background: var(--motivation); }
+      .method { background: var(--method); }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #fff;
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 11px;
+      }
+      .pill .dot { width: 6px; height: 6px; border-radius: 999px; background: #9ca3af; }
+      .pill.tag { background: var(--chip); }
+      .pill.good .dot { background: #10b981; }
+      .pill.warn .dot { background: #f59e0b; }
+      .pill.hot .dot { background: #ef4444; }
+
+      .why { border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 8px; }
+      .why .k { font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif; font-size: 11px; color: var(--muted); margin: 0 0 6px; font-weight: 700; }
+      .why p { margin: 0; font-size: 12.5px; }
+
+      .spotlight { border: 1px solid var(--spot-border); background: var(--spot); }
+      .spotlight-header { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+      .spotlight-header .badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 4px 10px; border-radius: 999px;
+        border: 1px solid rgba(251, 146, 60, 0.6);
+        background: rgba(251, 146, 60, 0.12);
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 11px; font-weight: 800;
+      }
+
+      .signals { width: 100%; border-collapse: collapse; margin-top: 8px; font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif; font-size: 11px; color: #374151; }
+      .signals th, .signals td { border-top: 1px solid rgba(251, 146, 60, 0.35); padding: 6px 6px; text-align: left; vertical-align: top; }
+      .signals th { color: #7c2d12; font-weight: 800; }
+
+      .trend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .trend-box {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .trend-box .range {
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0 0 8px;
+      }
+
+      .bars { margin: 10px 0 0; display: grid; gap: 6px; }
+      .bar {
+        display: grid;
+        grid-template-columns: 1fr 80px;
+        gap: 10px;
+        align-items: center;
+        font-family: Arial, "Helvetica Neue", Helvetica, "Microsoft YaHei", sans-serif;
+        font-size: 11px;
+        color: #374151;
+      }
+      .bar .track { height: 10px; border-radius: 999px; background: #eef2f7; border: 1px solid #e5e7eb; overflow: hidden; }
+      .bar .fill { height: 100%; background: linear-gradient(90deg, #60a5fa, #a78bfa); border-radius: 999px; }
+      .bar .w { text-align: right; color: var(--muted); }
+
+      @media (max-width: 860px) {
+        .lede, .grid, .trend-grid { grid-template-columns: 1fr; }
+      }
+      @media print {
+        body { background: #fff; }
+        .preview-shell { max-width: none; margin: 0; padding: 0; }
+        .page { box-shadow: none; border: none; border-radius: 0; width: auto; margin: 0; padding: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <!-- Page 1 -->
+      <section class="page page-break">
+        <div class="brand">
+          <div>
+            <h1>ArXiv Daily Express · 学术速递</h1>
+            <ul class="chips">
+              <li class="chip"><strong>报告日</strong> 2026-02-18</li>
+              <li class="chip"><strong>分区</strong> cs.AI · cs.CV</li>
+              <li class="chip"><strong>关键词</strong> 3D / generative / restruction</li>
+            </ul>
+          </div>
+          <div class="meta">
+            生成时间：2026-02-19T18:49:02.900909+00:00<br />
+            抓取窗口：2026-02-18T00:00:00+00:00 ~ 2026-02-18T23:59:59+00:00<br />
+            入选：7 篇 · Spotlight：0 篇
+          </div>
+        </div>
+
+        <div class="lede">
+          <div class="trend">
+            <div class="label">今日趋势 · Global Trend</div>
+            <p>今日前沿研究聚焦于提升3D场景理解与重建的精度与效率。研究涵盖了从姿态无关的服装裁剪图生成、共享基平面的轻量化表示，到亚毫米级镜框测量及面向机器人协作的关节语义场景图构建。通过引入可学习周期激活、多尺度注意力机制及视觉语言模型，这些方法在保持甚至超越现有SOTA表现的同时，显著降低了计算开销与内存占用，推动了计算机视觉在辅助避障、自动化配镜及移动操作等实际场景中的高效落地。</p>
+          </div>
+          <div class="top3">
+            <div class="label">Top 3 推荐</div>
+            
+            <ol>
+              
+              <li>
+                <span class="t">Fused-Planes: Why Train a Thousand Tri-Planes When You Can Share?</span><br />
+                <span class="sub">cs.CV · 推荐度 5/5 · 相关度 95</span>
+              </li>
+              
+              <li>
+                <span class="t">DressWild: Feed-Forward Pose-Agnostic Garment Sewing Pattern Generation from In-the-Wild Images</span><br />
+                <span class="sub">cs.CV · 推荐度 4/5 · 相关度 95</span>
+              </li>
+              
+              <li>
+                <span class="t">Parameter-Free Adaptive Multi-Scale Channel-Spatial Attention Aggregation framework for 3D Indoor Semantic Scene Completion Toward Assisting Visually Impaired</span><br />
+                <span class="sub">cs.CV · 推荐度 4/5 · 相关度 85</span>
+              </li>
+              
+            </ol>
+          </div>
+        </div>
+
+        <h2 class="section-title">阅读方式建议</h2>
+        <ul style="margin: 0; padding-left: 18px; font-size: 13px">
+          <li>先看 Top 3 + 今日趋势，快速掌握“今天发生了什么”。</li>
+          <li>每篇先扫 Motivation/Method，再决定是否点开全文。</li>
+          <li>若启用 Spotlight，会展示可追溯外部信号来源与指标。</li>
+        </ul>
+      </section>
+
+      <!-- Page 2+: Papers -->
+      <section class="page page-break">
+        <h2 class="section-title" style="margin-top: 0">精选论文 · Selected Papers</h2>
+        <div class="grid">
+          
+          <article class="card">
+            <h3><a href="http://arxiv.org/abs/2602.16502v1">DressWild: Feed-Forward Pose-Agnostic Garment Sewing Pattern Generation from In-the-Wild Images</a></h3>
+            <p class="sub">arXiv:2602.16502v1 · 2026-02-18T14:45:15+00:00 · Zeng Tao, Ying Jiang, Yunuo Chen</p>
+            <div class="row">
+              <span class="pill tag"><span class="dot"></span>cs.CV</span>
+              <span class="pill good"><span class="dot"></span>相关度 95</span>
+              <span class="pill warn"><span class="dot"></span>推荐度 4/5</span>
+              <span class="pill tag"><span class="dot"></span>相比现有SOTA，该方法在无需迭代优化的前提下，显著提升了对复杂姿态的鲁棒性与生成效率。</span>
+            </div>
+            <div class="box motivation">
+              <div class="k">Motivation · 痛点</div>
+              <p>现有前馈方法难处理复杂姿态，优化法效率低，亟需从单图高效生成可编辑、可仿真的服装裁剪图。</p>
+            </div>
+            <div class="box method">
+              <div class="k">Method · 方法</div>
+              <p>利用VLM归一化姿态，通过Transformer融合3D感知特征，直接预测2D裁剪图参数实现重建。</p>
+            </div>
+            <div class="why">
+              <div class="k">为什么入选</div>
+              <p>命中：3D / generation / reconstructs。理由：该论文研究从单张图像进行3D服装重建与模式生成，与3D、生成和重建关键词高度契合。</p>
+            </div>
+          </article>
+          
+          <article class="card">
+            <h3><a href="http://arxiv.org/abs/2410.23742v3">Fused-Planes: Why Train a Thousand Tri-Planes When You Can Share?</a></h3>
+            <p class="sub">arXiv:2410.23742v3 · 2026-02-18T11:25:46+00:00 · Karim Kassab, Antoine Schnepf, Jean-Yves Franceschi</p>
+            <div class="row">
+              <span class="pill tag"><span class="dot"></span>cs.CV</span>
+              <span class="pill good"><span class="dot"></span>相关度 95</span>
+              <span class="pill warn"><span class="dot"></span>推荐度 5/5</span>
+              <span class="pill tag"><span class="dot"></span>改进了主流的Tri-Plane表示法，在保持渲染质量的同时显著提升了训练速度并降低了内存占用。</span>
+            </div>
+            <div class="box motivation">
+              <div class="k">Motivation · 痛点</div>
+              <p>传统Tri-Plane独立训练每个物体，忽视了类别内的结构相似性，导致大规模重建效率极低。</p>
+            </div>
+            <div class="box method">
+              <div class="k">Method · 方法</div>
+              <p>引入全局共享基平面，通过潜空间将物体表示为基平面的分解与特定特征的结合，优化资源利用。</p>
+            </div>
+            <div class="why">
+              <div class="k">为什么入选</div>
+              <p>命中：3D / restruction。理由：该论文提出了一种高效的3D表示方法，专注于物体类别的重建，与3D和重建（restruction）关键词高度契合。</p>
+            </div>
+          </article>
+          
+          <article class="card">
+            <h3><a href="http://arxiv.org/abs/2602.16385v1">Parameter-Free Adaptive Multi-Scale Channel-Spatial Attention Aggregation framework for 3D Indoor Semantic Scene Completion Toward Assisting Visually Impaired</a></h3>
+            <p class="sub">arXiv:2602.16385v1 · 2026-02-18T11:45:01+00:00 · Qi He, XiangXiang Wang, Jingtao Zhang</p>
+            <div class="row">
+              <span class="pill tag"><span class="dot"></span>cs.CV</span>
+              <span class="pill good"><span class="dot"></span>相关度 85</span>
+              <span class="pill warn"><span class="dot"></span>推荐度 4/5</span>
+              <span class="pill tag"><span class="dot"></span>基于MonoScene管线的改进，通过轻量级注意力与门控机制优化特征质量，在NYUv2上优于现有SOTA。</span>
+            </div>
+            <div class="box motivation">
+              <div class="k">Motivation · 痛点</div>
+              <p>单目SSC在投影和融合时缺乏可靠性建模，易产生投影扩散和特征纠缠，导致室内场景结构稳定性差。</p>
+            </div>
+            <div class="box method">
+              <div class="k">Method · 方法</div>
+              <p>提出AMAA框架，利用并行通道空间注意力校准特征，并通过分层自适应门控策略优化多尺度信息注入。</p>
+            </div>
+            <div class="why">
+              <div class="k">为什么入选</div>
+              <p>命中：3D / restruction。理由：该论文研究3D语义场景补全（SSC），属于3D重建领域，且补全任务具有生成性质。</p>
+            </div>
+          </article>
+          
+          <article class="card">
+            <h3><a href="http://arxiv.org/abs/2602.16337v1">Subtractive Modulative Network with Learnable Periodic Activations</a></h3>
+            <p class="sub">arXiv:2602.16337v1 · 2026-02-18T10:20:50+00:00 · Tiou Wang, Zhuoqian Yang, Markus Flierl</p>
+            <div class="row">
+              <span class="pill tag"><span class="dot"></span>cs.CV</span>
+              <span class="pill good"><span class="dot"></span>相关度 85</span>
+              <span class="pill warn"><span class="dot"></span>推荐度 4/5</span>
+              <span class="pill tag"><span class="dot"></span>在图像重建和NeRF任务中，相比当前SOTA方法实现了更高的参数效率与重建精度。</span>
+            </div>
+            <div class="box motivation">
+              <div class="k">Motivation · 痛点</div>
+              <p>现有INR架构在处理复杂信号时参数效率不足，且缺乏基于经典信号处理原则的系统性设计。</p>
+            </div>
+            <div class="box method">
+              <div class="k">Method · 方法</div>
+              <p>提出SMN架构，利用可学习周期激活层生成多频基底，并通过调制掩码模块主动生成高次谐波。</p>
+            </div>
+            <div class="why">
+              <div class="k">为什么入选</div>
+              <p>命中：3D / restruction。理由：该论文研究INR架构，在3D NeRF任务和重建精度上表现优异，符合用户关键词。</p>
+            </div>
+          </article>
+          
+          <article class="card">
+            <h3><a href="http://arxiv.org/abs/2504.08603v3">FindAnything: Open-Vocabulary and Object-Centric Mapping for Robot Exploration in Any Environment</a></h3>
+            <p class="sub">arXiv:2504.08603v3 · 2026-02-18T15:52:04+00:00 · Sebastián Barbas Laina, Simon Boche, Sotiris Papatheodorou</p>
+            <div class="row">
+              <span class="pill tag"><span class="dot"></span>cs.RO</span>
+              <span class="pill good"><span class="dot"></span>相关度 75</span>
+              <span class="pill warn"><span class="dot"></span>推荐度 4/5</span>
+              <span class="pill tag"><span class="dot"></span>语义精度比肩SOTA，但在速度和内存效率上显著提升，支持资源受限设备下的实时机器人探索任务。</span>
+            </div>
+            <div class="box motivation">
+              <div class="k">Motivation · 痛点</div>
+              <p>大规模未知环境的实时开放词汇语义理解受限于计算与内存开销，难以在无人机等受限设备上部署。</p>
+            </div>
+            <div class="box method">
+              <div class="k">Method · 方法</div>
+              <p>利用eSAM在物体级聚合视觉语言特征，并集成至体积子图中，实现高效的以物体为中心的3D语义建图。</p>
+            </div>
+            <div class="why">
+              <div class="k">为什么入选</div>
+              <p>命中：3D / restruction。理由：该论文涉及3D几何建图与体积表示，与3D重建（restruction）高度相关，但未涉及生成式（generative）技术。</p>
+            </div>
+          </article>
+          
+          <article class="card">
+            <h3><a href="http://arxiv.org/abs/2602.16281v1">Breaking the Sub-Millimeter Barrier: Eyeframe Acquisition from Color Images</a></h3>
+            <p class="sub">arXiv:2602.16281v1 · 2026-02-18T09:06:06+00:00 · Manel Guzmán, Antonio Agudo</p>
+            <div class="row">
+              <span class="pill tag"><span class="dot"></span>cs.CV</span>
+              <span class="pill good"><span class="dot"></span>相关度 70</span>
+              <span class="pill warn"><span class="dot"></span>推荐度 4/5</span>
+              <span class="pill tag"><span class="dot"></span>该方法通过计算机视觉替代了传统的机械追踪设备，在保持亚毫米级精度的同时显著简化了配镜工作流。</span>
+            </div>
+            <div class="box motivation">
+              <div class="k">Motivation · 痛点</div>
+              <p>传统眼镜框机械扫描耗时长、需专用设备且效率低，需亚毫米级精度的自动化视觉替代方案。</p>
+            </div>
+            <div class="box method">
+              <div class="k">Method · 方法</div>
+              <p>基于多视图彩色图像，融合图像分割、深度估计与RGB-D数据集成，实现高精度镜框3D轮廓测量。</p>
+            </div>
+            <div class="why">
+              <div class="k">为什么入选</div>
+              <p>命中：3D / restruction。理由：该论文涉及从多视图图像中进行深度估计以获取3D空间信息，符合3D重建的研究方向。</p>
+            </div>
+          </article>
+          
+          <article class="card">
+            <h3><a href="http://arxiv.org/abs/2602.16356v1">Articulated 3D Scene Graphs for Open-World Mobile Manipulation</a></h3>
+            <p class="sub">arXiv:2602.16356v1 · 2026-02-18T10:40:35+00:00 · Martin Büchner, Adrian Röfer, Tim Engelbracht</p>
+            <div class="row">
+              <span class="pill tag"><span class="dot"></span>cs.RO</span>
+              <span class="pill good"><span class="dot"></span>相关度 65</span>
+              <span class="pill warn"><span class="dot"></span>推荐度 4/5</span>
+              <span class="pill tag"><span class="dot"></span>在传统3D场景图基础上引入运动学建模与层级关系推理，通过统一优化框架提升了关节参数估计的鲁棒性。</span>
+            </div>
+            <div class="box motivation">
+              <div class="k">Motivation · 痛点</div>
+              <p>机器人难以预测物体运动，需弥合语义、几何与运动学差距以实现长程移动操作。</p>
+            </div>
+            <div class="box method">
+              <div class="k">Method · 方法</div>
+              <p>提出MoMa-SG，利用点追踪和统一螺旋估计识别关节参数，通过父子关系推理构建语义运动场景图。</p>
+            </div>
+            <div class="why">
+              <div class="k">为什么入选</div>
+              <p>命中：3D / restruction。理由：该论文涉及3D场景图构建与运动模型重建，符合3D和重建关键词，但未涉及生成式内容。</p>
+            </div>
+          </article>
+          
+        </div>
+      </section>
+
+      
+
+      <!-- Final: Weekly/Monthly Trends -->
+      <section class="page">
+        <h2 class="section-title" style="margin-top: 0">本周 / 本月趋势 · Weekly & Monthly Trends</h2>
+        <div class="trend-grid">
+          
+          <section class="trend-box">
+            <h3 style="margin: 0 0 6px; font-family: Arial, sans-serif; font-size: 14px">本周趋势</h3>
+            <p class="range">范围：2026-02-13 ~ 2026-02-19</p>
+            <p style="margin: 0; font-size: 13.5px">本周计算机视觉与机器人领域的研究呈现出明显的“效能与实战”导向。在3D表征与重建方面，Fused-Planes与SMN等工作通过优化基底共享与激活机制，在提升精度的同时显著降低了算力门槛。同时，三维语义感知的应用场景进一步向复杂现实环境延伸：从支持机器人实时探索的物体中心化建图，到具备运动学推理能力的层级场景图MoMa-SG，再到面向视障辅助与服装制造的轻量化方案，研究者们正致力于通过高效的注意力机制与多模态融合技术，在保持亚毫米级精度或高鲁棒性的前提下，实现从虚拟建模到物理世界操作的无缝衔接。</p>
+            <div class="bars" aria-label="Weekly keywords">
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 100.0%"></div></div>
+                <div class="w">restruction</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 67.0%"></div></div>
+                <div class="w">sota</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">tri-plane</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">esam</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">rgb-d</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">smn</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">nerf</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">moma-sg</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">amaa</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">monoscene</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">nyuv2</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">vlm</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">transformer</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">generation</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">reconstructs</div>
+              </div>
+              
+            </div>
+          </section>
+          
+
+          
+          <section class="trend-box">
+            <h3 style="margin: 0 0 6px; font-family: Arial, sans-serif; font-size: 14px">本月趋势</h3>
+            <p class="range">范围：2026-01-21 ~ 2026-02-19</p>
+            <p style="margin: 0; font-size: 13.5px">本阶段的研究核心在于通过架构优化与多模态融合，实现三维感知与重建的“降本增效”与“高精落地”。从Fused-Planes对表示法的轻量化改进，到SMN与AMAA在参数效率上的突破，显现出学界正致力于在有限算力下追求极致的重建精度。同时，研究视野正向复杂现实场景深度延伸：MoMa-SG与FindAnything增强了机器人在动态开放环境下的语义理解与运动建模能力；而DressWild与镜框高精度测量则标志着计算机视觉正取代传统机械设备，实现从姿态鲁棒性到亚毫米级精度的跨越，加速了三维视觉在移动机器人与个性化定制领域的工业化进程。</p>
+            <div class="bars" aria-label="Monthly keywords">
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 100.0%"></div></div>
+                <div class="w">restruction</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 67.0%"></div></div>
+                <div class="w">sota</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">tri-plane</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">esam</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">rgb-d</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">smn</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">nerf</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">moma-sg</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">amaa</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">monoscene</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">nyuv2</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">vlm</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">transformer</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">generation</div>
+              </div>
+              
+              <div class="bar">
+                <div class="track"><div class="fill" style="width: 17.0%"></div></div>
+                <div class="w">reconstructs</div>
+              </div>
+              
+            </div>
+          </section>
+          
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

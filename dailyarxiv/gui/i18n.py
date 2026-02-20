@@ -14,6 +14,13 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "language": "语言",
         "config_path": "配置文件路径",
         "config": "配置",
+        "save_config": "保存配置",
+        "save_path": "保存到文件",
+        "autosave_on_run": "点击生成时自动保存",
+        "save_api_key": "保存 API key（不安全）",
+        "btn_save": "保存",
+        "saved_ok": "已保存到：{path}",
+        "saved_fail": "保存失败：{error}",
         "llm": "LLM",
         "llm_caption": "API key 默认只从环境变量读取（优先 GEMINI_API_KEY，其次 OPENAI_API_KEY）。不会写入文件。",
         "api_key_session": "API key（仅本次会话）",
@@ -42,6 +49,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "chart_type": "关键词图（chart_type）",
         "output": "输出",
         "out_dir": "输出目录（out-dir）",
+        "html_template": "HTML 模板（html_template）",
         "write_pdf": "生成 PDF（write_pdf）",
         "live": "实时刷新",
         "auto_refresh_ms": "自动刷新（毫秒）",
@@ -103,6 +111,13 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "language": "Language",
         "config_path": "Config path",
         "config": "Config",
+        "save_config": "Save config",
+        "save_path": "Save to file",
+        "autosave_on_run": "Autosave on Run",
+        "save_api_key": "Save API key (unsafe)",
+        "btn_save": "Save",
+        "saved_ok": "Saved to: {path}",
+        "saved_fail": "Save failed: {error}",
         "llm": "LLM",
         "llm_caption": "API key is read from env vars only (GEMINI_API_KEY preferred, then OPENAI_API_KEY). Never written to disk.",
         "api_key_session": "API key (session only)",
@@ -131,6 +146,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "chart_type": "chart_type",
         "output": "Output",
         "out_dir": "out-dir",
+        "html_template": "html_template",
         "write_pdf": "write_pdf",
         "live": "Live",
         "auto_refresh_ms": "auto refresh (ms)",
@@ -194,4 +210,3 @@ def tr(lang: str, key: str, **kwargs: Any) -> str:
         except Exception:
             return text
     return text
-

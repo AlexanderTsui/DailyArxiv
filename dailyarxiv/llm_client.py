@@ -184,13 +184,16 @@ class LLMClient:
             user = (
                 "Fill the fields for PaperAnalysis. Constraints:\n"
                 "- title_cn: Chinese translation of title\n"
+                "- summary_cn: Chinese translation of the abstract (do NOT add new info)\n"
                 "- motivation/method: <50 Chinese chars each\n"
                 "- paradigm_relation: describe relation to SOTA (Chinese)\n"
                 "- score: 1-5 based on novelty AND relevance\n\n"
+                "- affiliations: ONLY use affiliation_hints; if none, output [] (do NOT guess)\n\n"
                 f"Paper metadata:\n"
                 f"id={c.id}\n"
                 f"title_en={c.title_en}\n"
                 f"authors={c.authors}\n"
+                f"affiliation_hints={getattr(c, 'affiliations', [])}\n"
                 f"url={c.url}\n"
                 f"publish_date={c.publish_date}\n"
                 f"primary_category={c.primary_category}\n\n"
@@ -200,6 +203,9 @@ class LLMClient:
             analysis = self._parse_or_repair(self._model_smart, system, user, PaperAnalysis)
             # Ensure relevance matches our judgement (LLM may override)
             analysis.relevance = j
+            analysis.affiliations = list(getattr(c, "affiliations", []) or [])
+            if not str(getattr(analysis, "summary_cn", "")).strip():
+                analysis.summary_cn = str(getattr(c, "abstract", "")).strip() or "（摘要翻译生成失败）"
             out.append(analysis)
         return out
 

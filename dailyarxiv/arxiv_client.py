@@ -28,6 +28,53 @@ def _iso(dt: datetime) -> str:
     return dt.isoformat()
 
 
+def _extract_affiliations(result: object) -> list[str]:
+    """
+    Best-effort extraction: arXiv metadata often lacks affiliations.
+    We try common attribute names on the result object and on author objects.
+    """
+
+    def _flatten(v: object | None) -> list[str]:
+        if v is None:
+            return []
+        if isinstance(v, str):
+            return [v]
+        if isinstance(v, dict):
+            for k in ("name", "affiliation", "institution", "org", "organization"):
+                if k in v:
+                    return _flatten(v.get(k))
+            return []
+        if isinstance(v, (list, tuple, set)):
+            out: list[str] = []
+            for item in v:
+                out.extend(_flatten(item))
+            return out
+        return [str(v)]
+
+    raw: list[str] = []
+    for attr in ("affiliations", "affiliation"):
+        raw.extend(_flatten(getattr(result, attr, None)))
+
+    authors = getattr(result, "authors", None) or []
+    for a in authors:
+        for attr in ("affiliation", "affiliations", "institution", "institutions", "organization", "org"):
+            raw.extend(_flatten(getattr(a, attr, None)))
+
+    seen: set[str] = set()
+    out: list[str] = []
+    for s in raw:
+        t = " ".join(str(s).split()).strip()
+        if not t:
+            continue
+        if t.lower() in {"none", "null", "n/a"}:
+            continue
+        if t in seen:
+            continue
+        seen.add(t)
+        out.append(t)
+    return out[:8]
+
+
 def harvest_candidates(
     categories: list[str],
     timezone: str,
@@ -158,6 +205,7 @@ def _to_candidate(r: object) -> PaperCandidate:
     title = getattr(r, "title", "").strip().replace("\n", " ")
     summary = getattr(r, "summary", "").strip().replace("\n", " ")
     authors = [getattr(a, "name", str(a)) for a in getattr(r, "authors", [])][:3]
+    affiliations = _extract_affiliations(r)
     updated = getattr(r, "updated", None) or getattr(r, "published", None)
     publish_date = _iso(updated) if isinstance(updated, datetime) else ""
     categories = list(getattr(r, "categories", []) or [])
@@ -166,6 +214,7 @@ def _to_candidate(r: object) -> PaperCandidate:
         id=str(pid),
         title_en=title,
         authors=authors,
+        affiliations=affiliations,
         url=str(entry_id),
         publish_date=publish_date,
         categories=[str(c) for c in categories],

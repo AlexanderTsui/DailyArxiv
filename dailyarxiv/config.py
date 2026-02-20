@@ -53,6 +53,8 @@ class SpotlightSettings(BaseModel):
 
 class OutputSettings(BaseModel):
     write_pdf: bool = True
+    # HTML template short-name (editorial|baseline|modern|compact) or a '*.j2' filename.
+    html_template: str = "editorial"
 
 
 class Settings(BaseSettings):
@@ -71,3 +73,15 @@ def load_settings(config_path: Path) -> Settings:
     if config_path.exists():
         data = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
     return Settings.model_validate(data)
+
+
+def save_settings(config_path: Path, settings: Settings, *, include_api_key: bool = False) -> None:
+    data = settings.model_dump()
+    if not include_api_key:
+        data.setdefault("llm", {})
+        data["llm"]["api_key"] = ""
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    config_path.write_text(
+        yaml.safe_dump(data, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
+    )

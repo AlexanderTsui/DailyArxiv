@@ -198,7 +198,7 @@ def run_pipeline(
 
     if not pdf_only:
         _progress("render", "Rendering HTML…")
-        render_report_html(report.model_dump(), html_path)
+        render_report_html(report.model_dump(), html_path, template_name=settings.output.html_template)
     if not html_only and settings.output.write_pdf:
         _progress("render", "Rendering PDF…")
         render_html_to_pdf_if_available(html_path, pdf_path)

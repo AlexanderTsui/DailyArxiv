@@ -1,8 +1,11 @@
 llm:
-  api_key: ""                             # 不要把 key 写进仓库；建议用环境变量 GEMINI_API_KEY
-  base_url: "https://co.yes.vg/gemini"    # 兼容 OpenAI SDK 的 Gemini 中转
-  model_fast: "gemini-3-flash"            # 用于相关性筛选
-  model_smart: "gemini-3-flash"           # 用于单篇分析/趋势总结
+  # 不要把真实 key 写进仓库；建议用环境变量 GEMINI_API_KEY（优先）或 OPENAI_API_KEY。
+  api_key: ""
+  # Gemini 网关（本项目内置对 /v1beta 的适配，不要求 OpenAI 协议一致）
+  base_url: "https://co.yes.vg/gemini"
+  # 默认统一使用 gemini-3-flash（项目会做必要别名映射）
+  model_fast: "gemini-3-flash"
+  model_smart: "gemini-3-flash"
   temperature: 0
 
 search:
@@ -10,11 +13,13 @@ search:
     - "cs.CL"
     - "cs.AI"
     - "cs.LG"
-  mode: "latest_update_day"  # latest_update_day | fixed_window
-  time_window_hours: 24      # fixed_window 时生效
-  lookback_days: 7           # latest_update_day 时生效
+  # latest_update_day：默认取最近一次更新日；fixed_window：按时间窗口抓取
+  mode: "latest_update_day"
+  time_window_hours: 24
+  lookback_days: 7
   timezone: "UTC"
   max_results: 120
+  # 关键词：可空；为空时将跳过 LLM 相关性筛选（避免全被过滤掉）
   keywords_include:
     - "Agent"
     - "RAG"
@@ -26,7 +31,8 @@ search:
 filter:
   relevance_threshold: 60
   max_selected: 20
-  reviewer_mode: "fast_only" # fast_only | fast_then_review
+  # fast_only：只用 fast；fast_then_review：fast 初筛 + smart 复核
+  reviewer_mode: "fast_only"
 
 trend:
   enable_weekly: true
@@ -34,9 +40,10 @@ trend:
   weekly_days: 7
   monthly_days: 30
   top_k_keywords: 20
-  chart_type: "bar"          # bar | wordcloud
+  chart_type: "bar" # bar | wordcloud
 
 spotlight:
+  # Spotlight 为保证真实性，需要外部信号源（如 Semantic Scholar），当前默认关闭。
   enable: false
   recent_days: 7
   attention_threshold: 70
@@ -46,3 +53,4 @@ spotlight:
 
 output:
   write_pdf: true
+

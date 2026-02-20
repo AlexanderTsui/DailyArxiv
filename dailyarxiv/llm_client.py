@@ -10,6 +10,7 @@ import httpx
 from pydantic import BaseModel, ValidationError
 
 from .config import LLMSettings
+from .errors import CancelledError
 from .models import PaperAnalysis, PaperCandidate, RelevanceJudgement
 
 T = TypeVar("T", bound=BaseModel)
@@ -101,11 +102,17 @@ class LLMClient:
         max_selected: int,
         threshold: int,
         reviewer_mode: str,
+        progress_cb: Any | None = None,
+        cancel: Any | None = None,
     ) -> dict[str, Any]:
+        total = len(candidates)
+
         if not [k for k in keywords if str(k).strip()]:
             by_id: dict[str, RelevanceJudgement] = {}
             all_judgements: list[RelevanceJudgement] = []
-            for c in candidates:
+            for i, c in enumerate(candidates, start=1):
+                if cancel is not None and hasattr(cancel, "is_set") and bool(cancel.is_set()):
+                    raise CancelledError("Cancelled")
                 j = RelevanceJudgement(
                     is_relevant=True,
                     relevance_score=50,
@@ -114,6 +121,8 @@ class LLMClient:
                 )
                 by_id[c.id] = j
                 all_judgements.append(j)
+                if progress_cb:
+                    progress_cb("filter", f"Judged {c.id}", i, total)
             selected = sorted(candidates, key=lambda x: x.publish_date, reverse=True)[:max_selected]
             _ = reviewer_mode
             _ = threshold
@@ -126,7 +135,11 @@ class LLMClient:
         )
         by_id: dict[str, RelevanceJudgement] = {}
         all_judgements: list[RelevanceJudgement] = []
-        for c in candidates:
+        for i, c in enumerate(candidates, start=1):
+            if cancel is not None and hasattr(cancel, "is_set") and bool(cancel.is_set()):
+                raise CancelledError("Cancelled")
+            if progress_cb:
+                progress_cb("filter", f"Judging {c.id}", i, total)
             user = (
                 f"User keywords: {keywords}\n\n"
                 f"Paper title: {c.title_en}\n"
@@ -147,14 +160,26 @@ class LLMClient:
 
         return {"by_id": by_id, "all_judgements": all_judgements, "selected": selected}
 
-    def analyze_papers(self, *, selected: list[PaperCandidate], relevance_by_id: dict[str, RelevanceJudgement]) -> list[PaperAnalysis]:
+    def analyze_papers(
+        self,
+        *,
+        selected: list[PaperCandidate],
+        relevance_by_id: dict[str, RelevanceJudgement],
+        progress_cb: Any | None = None,
+        cancel: Any | None = None,
+    ) -> list[PaperAnalysis]:
         system = (
             "You are a senior AI researcher and editor. "
             "Read the abstract and produce a structured Chinese analysis. "
             "Be specific, avoid fluff, and keep each field short as requested."
         )
         out: list[PaperAnalysis] = []
-        for c in selected:
+        total = len(selected)
+        for i, c in enumerate(selected, start=1):
+            if cancel is not None and hasattr(cancel, "is_set") and bool(cancel.is_set()):
+                raise CancelledError("Cancelled")
+            if progress_cb:
+                progress_cb("analyze", f"Analyzing {c.id}", i, total)
             j = relevance_by_id[c.id]
             user = (
                 "Fill the fields for PaperAnalysis. Constraints:\n"

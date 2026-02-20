@@ -31,9 +31,13 @@ wordcloud = [
 dev = [
   "pytest>=8",
 ]
+gui = [
+  "streamlit>=1.36",
+]
 
 [project.scripts]
 dailyarxiv = "dailyarxiv.cli:main"
+dailyarxiv-gui = "dailyarxiv.gui.app:main"
 
 [tool.setuptools]
 include-package-data = true

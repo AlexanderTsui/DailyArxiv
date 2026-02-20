@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Iterator
 
 from zoneinfo import ZoneInfo
 
@@ -23,10 +24,23 @@ class ArchivistSQLite:
         self.path = path
         self._init_db()
 
-    def _connect(self) -> sqlite3.Connection:
-        con = sqlite3.connect(self.path)
+    @contextmanager
+    def _connect(self) -> Iterator[sqlite3.Connection]:
+        con = sqlite3.connect(self.path, timeout=30)
         con.row_factory = sqlite3.Row
-        return con
+        try:
+            yield con
+        except Exception:
+            try:
+                con.rollback()
+            finally:
+                con.close()
+            raise
+        else:
+            try:
+                con.commit()
+            finally:
+                con.close()
 
     def _init_db(self) -> None:
         with self._connect() as con:

@@ -4,12 +4,14 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from typing import Callable
 
 from zoneinfo import ZoneInfo
 
 from .archivist_sqlite import ArchivistSQLite
 from .arxiv_client import apply_keyword_heuristics, harvest_candidates
 from .config import Settings
+from .errors import CancelledError
 from .llm_client import LLMClient
 from .models import DailyReport, PaperAnalysis, PaperCandidate, PeriodTrend
 from .render.renderer import render_report_html
@@ -26,13 +28,30 @@ def run_pipeline(
     dry_run: bool,
     html_only: bool,
     pdf_only: bool,
+    progress_cb: Callable[[str, dict[str, Any]], None] | None = None,
+    cancel: Any | None = None,
 ) -> dict[str, Any]:
     tz = ZoneInfo(settings.search.timezone)
     generated_at = datetime.now(tz).isoformat()
+    cancel_event = cancel
+
+    def _check_cancel() -> None:
+        if cancel_event is not None and hasattr(cancel_event, "is_set") and bool(cancel_event.is_set()):
+            raise CancelledError("Cancelled")
+
+    def _progress(stage: str, message: str, done: int | None = None, total: int | None = None) -> None:
+        if progress_cb:
+            payload: dict[str, Any] = {"message": message}
+            if done is not None:
+                payload["done"] = done
+            if total is not None:
+                payload["total"] = total
+            progress_cb(stage, payload)
 
     max_results_eff = max_results or settings.search.max_results
     max_selected_eff = max_selected or settings.filter.max_selected
 
+    _progress("harvest", "Harvesting candidates…")
     harvest = harvest_candidates(
         categories=settings.search.categories,
         timezone=settings.search.timezone,
@@ -43,6 +62,7 @@ def run_pipeline(
         date_override=None if date_arg == "auto" else date_arg,
     )
     report_date = harvest.report_date
+    _check_cancel()
 
     out_dir = out_root / report_date
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -54,6 +74,7 @@ def run_pipeline(
     candidates = apply_keyword_heuristics(
         candidates, settings.search.keywords_include, settings.search.keywords_exclude
     )
+    _progress("harvest", f"Candidates after heuristics: {len(candidates)}")
 
     debug_candidates_path = out_dir / "debug_candidates.json"
     debug_payload: dict[str, Any] = {
@@ -66,31 +87,45 @@ def run_pipeline(
 
     if dry_run:
         debug_candidates_path.write_text(json.dumps(debug_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        _progress("harvest", "Dry-run completed.")
         return {"report_date": report_date, "out_dir": str(out_dir)}
 
+    _check_cancel()
     llm = LLMClient.from_settings(settings.llm)
 
+    _progress("filter", "Filtering relevance…")
     judgements = llm.filter_relevance(
         candidates=candidates,
         keywords=settings.search.keywords_include,
         max_selected=max_selected_eff,
         threshold=settings.filter.relevance_threshold,
         reviewer_mode=settings.filter.reviewer_mode,
+        progress_cb=_progress,
+        cancel=cancel_event,
     )
+    _progress("filter", f"Selected: {len(judgements['selected'])}/{len(candidates)}")
     debug_payload["judgements"] = [j.model_dump() for j in judgements["all_judgements"]]
     debug_payload["selected_ids"] = [c.id for c in judgements["selected"]]
     debug_candidates_path.write_text(json.dumps(debug_payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    _check_cancel()
+    _progress("analyze", "Analyzing selected papers…")
     analyses: list[PaperAnalysis] = llm.analyze_papers(
         selected=judgements["selected"],
         relevance_by_id=judgements["by_id"],
+        progress_cb=_progress,
+        cancel=cancel_event,
     )
 
+    _check_cancel()
+    _progress("trend", "Summarizing daily trend…")
     global_trend = llm.summarize_daily_trend(analyses)
 
     weekly_trend: PeriodTrend | None = None
     monthly_trend: PeriodTrend | None = None
 
+    _check_cancel()
+    _progress("archive", "Writing to SQLite…")
     run_id = arch.begin_run(
         report_date=report_date,
         generated_at=generated_at,
@@ -105,6 +140,8 @@ def run_pipeline(
     arch.write_analyses(run_id, analyses)
 
     if settings.trend.enable_weekly:
+        _check_cancel()
+        _progress("trend", "Building weekly trend…")
         weekly_items = arch.get_analyses_between(days=settings.trend.weekly_days, timezone=settings.search.timezone)
         weekly_kw = build_bar_keywords(weekly_items, top_k=settings.trend.top_k_keywords)
         weekly_summary = summarize_period_trend(llm, "week", weekly_items, timezone=settings.search.timezone)
@@ -119,6 +156,8 @@ def run_pipeline(
         arch.write_trend(run_id, weekly_trend)
 
     if settings.trend.enable_monthly:
+        _check_cancel()
+        _progress("trend", "Building monthly trend…")
         monthly_items = arch.get_analyses_between(days=settings.trend.monthly_days, timezone=settings.search.timezone)
         monthly_kw = build_bar_keywords(monthly_items, top_k=settings.trend.top_k_keywords)
         monthly_summary = summarize_period_trend(llm, "month", monthly_items, timezone=settings.search.timezone)
@@ -158,9 +197,12 @@ def run_pipeline(
     pdf_path = out_dir / "report.pdf"
 
     if not pdf_only:
+        _progress("render", "Rendering HTML…")
         render_report_html(report.model_dump(), html_path)
     if not html_only and settings.output.write_pdf:
+        _progress("render", "Rendering PDF…")
         render_html_to_pdf_if_available(html_path, pdf_path)
+    _progress("render", "Done.")
 
     return {
         "report_date": report_date,

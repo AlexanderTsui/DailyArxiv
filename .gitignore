@@ -15,3 +15,4 @@ reports/
 reports_test/
 dailyarxiv.sqlite
 pytest_work_*/
+config.local.yaml
